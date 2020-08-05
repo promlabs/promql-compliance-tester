@@ -2,7 +2,7 @@
 
 The PromQL Compliance Tester is a tool for running comparison tests between native Prometheus and vendor PromQL API implementations.
 
-The tool was first published and described in https://promlabs.com/blog/2020/08/05/comparing-promql-correctness-across-vendors, and some test results have been published at https://promlabs.com/promql-compliance-tests.
+The tool was first published and described in https://promlabs.com/blog/2020/08/06/comparing-promql-correctness-across-vendors, and some test results have been published at https://promlabs.com/promql-compliance-tests.
 
 ## Build Requirements
 
