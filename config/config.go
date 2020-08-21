@@ -29,6 +29,7 @@ type QueryTweak struct {
 	TruncateTimestampsToMS int64             `yaml:"truncate_timestamps_to_ms" json:"truncateTimestampsToMS,omitempty"`
 	AlignTimestampsToStep  bool              `yaml:"align_timestamps_to_step" json:"alignTimestampsToStep,omitempty"`
 	DropResultLabels       []model.LabelName `yaml:"drop_result_labels" json:"dropResultLabels,omitempty"`
+	IgnoreFirstStep        bool              `yaml:"ignore_first_step" json:"ignoreFirstStep,omitempty"`
 }
 
 // TestCase represents a given query (pattern) to be tested.

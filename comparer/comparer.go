@@ -87,6 +87,16 @@ func (c *Comparer) Compare(tc *TestCase) (*Result, error) {
 
 	sort.Sort(testResult.(model.Matrix))
 
+	for _, qt := range c.QueryTweaks {
+		if qt.IgnoreFirstStep {
+			for _, r := range refResult.(model.Matrix) {
+				if len(r.Values) > 0 && r.Values[0].Timestamp.Time().Sub(tc.Start) <= 2*time.Millisecond {
+					r.Values = r.Values[1:]
+				}
+			}
+		}
+	}
+
 	cmpOpts := cmp.Options{
 		// Translate sample values into float64 so that cmpopts.EquateApprox() works.
 		cmp.Transformer("TranslateFloat64", func(in model.SampleValue) float64 {
