@@ -70,7 +70,7 @@ func main() {
 	}
 
 	// Expand all placeholder variations in the templated test cases.
-	end := time.Now().Add(-1 * time.Minute)
+	end := time.Now().Add(-2 * time.Minute)
 	start := end.Add(-10 * time.Minute)
 	resolution := 10 * time.Second
 	expandedTestCases := testcases.ExpandTestCases(cfg.TestCases, cfg.QueryTweaks, start, end, resolution)
