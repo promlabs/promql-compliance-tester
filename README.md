@@ -1,6 +1,6 @@
 # PromQL Compliance Tester
 
-[![CircleCI](https://circleci.com/gh/promlabs/promql-compliance-tester/tree/master.svg?style=shield)][circleci]
+[![CircleCI](https://circleci.com/gh/promlabs/promql-compliance-tester/tree/master.svg?style=shield)](https://circleci.com/gh/promlabs/promql-compliance-tester)
 [![Go Report Card](https://goreportcard.com/badge/github.com/promlabs/promql-compliance-tester)](https://goreportcard.com/report/github.com/promlabs/promql-compliance-tester)
 
 The PromQL Compliance Tester is a tool for running comparison tests between native Prometheus and vendor PromQL API implementations.
