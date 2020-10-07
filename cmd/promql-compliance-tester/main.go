@@ -20,7 +20,7 @@ func newPromAPI(url string) (v1.API, error) {
 		Address: url,
 	})
 	if err != nil {
-		return nil, errors.Wrapf(err, "creating Prometheus API client for %q: %v", url)
+		return nil, errors.Wrapf(err, "creating Prometheus API client for %q: %v", url, err)
 	}
 
 	return v1.NewAPI(client), nil
