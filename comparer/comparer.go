@@ -111,11 +111,12 @@ func (c *Comparer) Compare(tc *TestCase) (*Result, error) {
 
 	for _, rt := range c.QueryTweaks {
 		if len(rt.DropResultLabels) != 0 {
+			localRt := rt
 			cmpOpts = append(
 				cmpOpts,
 				cmp.Options{cmp.Transformer("DropResultLabels", func(in model.Metric) model.Metric {
 					m := in.Clone()
-					for _, ln := range rt.DropResultLabels {
+					for _, ln := range localRt.DropResultLabels {
 						delete(m, ln)
 					}
 					return m
