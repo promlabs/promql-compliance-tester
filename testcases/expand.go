@@ -34,6 +34,7 @@ package testcases
 import (
 	"bytes"
 	"fmt"
+	"strings"
 	"text/template"
 	"time"
 
@@ -123,6 +124,9 @@ func applyQueryTweaks(tc *comparer.TestCase, tweaks []*config.QueryTweak) *compa
 		if t.AlignTimestampsToStep {
 			resTC.Start = resTC.Start.Truncate(resTC.Resolution)
 			resTC.End = resTC.End.Truncate(resTC.Resolution)
+		}
+		if (config.Substitution{}) != t.ApplyQuerySubstitution {
+			resTC.Query = strings.ReplaceAll(resTC.Query, t.ApplyQuerySubstitution.Old, t.ApplyQuerySubstitution.New)
 		}
 	}
 	return &resTC

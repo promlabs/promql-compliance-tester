@@ -31,6 +31,12 @@ type QueryTweak struct {
 	AlignTimestampsToStep  bool              `yaml:"align_timestamps_to_step" json:"alignTimestampsToStep,omitempty"`
 	DropResultLabels       []model.LabelName `yaml:"drop_result_labels" json:"dropResultLabels,omitempty"`
 	IgnoreFirstStep        bool              `yaml:"ignore_first_step" json:"ignoreFirstStep,omitempty"`
+	ApplyQuerySubstitution Substitution      `yaml:"apply_query_substitution" json:"applyQuerySubstitution,omitempty"`
+}
+
+type Substitution struct {
+	Old string `yaml:"old" json:"old"`
+	New string `yaml:"new" json:"new"`
 }
 
 // TestCase represents a given query (pattern) to be tested.
