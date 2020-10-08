@@ -13,6 +13,10 @@ test_target_config:
   #
   # UNCOMMENT FOR THANOS:
   # query_url: 'http://localhost:20902'
+  #
+  # UNCOMMENT FOR NEW RELIC, replacing <insights_query_api_key>
+  # query_url: https://prometheus-api.newrelic.com
+  # x_query_key: <insights_query_api_key>
 
 query_tweaks:
   # UNCOMMENT FOR CORTEX:
@@ -30,6 +34,22 @@ query_tweaks:
   # UNCOMMENT FOR VICTORIAMETRICS:
   #- note: 'VictoriaMetrics incorrectly modifies incoming start/end range query timestamps to be aligned to the resolution step size.'
   #  align_timestamps_to_step: true
+  #
+  # UNCOMMENT FOR NEW RELIC:
+  #- note: 'New Relic is sometimes off by 1ms when parsing floating point start/end timestamps.'
+  #  truncate_timestamps_to_ms: 1000
+  #- note: 'New Relic adds a "prometheus_server" label to distinguish Prometheus servers, leading to extra labels in query results. These need to be stripped before comparisons.'
+  #- note: 'New Relic does not consistently include the "__name__" attribute in its responses.'
+  #  no_bug: true
+  #  drop_result_labels:
+  #    - prometheus_server
+  #    - __name__
+  #- note: 'New Relic omits the first resolution step in the output.'
+  #  ignore_first_step: true
+  #- note: 'New Relic stores metric counters as deltas, not cumulative values. New Relic will recognize these as guages by if "_cnt" is appended to the metric name.'
+  #  apply_query_substitution:
+  #    old: _total
+  #    new: _total_cnt
 
 test_cases:
   # Scalar literals.
