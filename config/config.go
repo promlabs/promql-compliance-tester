@@ -18,9 +18,9 @@ type Config struct {
 
 // TargetConfig represents the configuration of a single Prometheus API endpoint.
 type TargetConfig struct {
-	QueryURL  string `yaml:"query_url"`
-	XQueryKey string `yaml:"x_query_key"`
-	TSDBPath  string `yaml:"tsdb_path"`
+	QueryURL string            `yaml:"query_url"`
+	Headers  map[string]string `yaml:"headers"`
+	TSDBPath string            `yaml:"tsdb_path"`
 }
 
 // A QueryTweak restricts or modifies a query in certain ways that avoids certain systematic errors and/or later comparison problems.

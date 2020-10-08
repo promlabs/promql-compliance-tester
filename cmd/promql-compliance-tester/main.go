@@ -18,8 +18,8 @@ import (
 
 func newPromAPI(targetConfig config.TargetConfig) (v1.API, error) {
 	apiConfig := api.Config{Address: targetConfig.QueryURL}
-	if len(targetConfig.XQueryKey) > 0 {
-		apiConfig.RoundTripper = RoundTripperWithHeader{XQueryKey: targetConfig.XQueryKey}
+	if len(targetConfig.Headers) > 0 {
+		apiConfig.RoundTripper = RoundTripperWithHeader{targetConfig.Headers}
 	}
 	client, err := api.NewClient(apiConfig)
 	if err != nil {
@@ -30,11 +30,13 @@ func newPromAPI(targetConfig config.TargetConfig) (v1.API, error) {
 }
 
 type RoundTripperWithHeader struct {
-	XQueryKey string
+	Headers map[string]string
 }
 
 func (rt RoundTripperWithHeader) RoundTrip(req *http.Request) (*http.Response, error) {
-	req.Header.Add("X-Query-Key", rt.XQueryKey)
+	for key, value := range rt.Headers {
+		req.Header.Add(key, value)
+	}
 	return http.DefaultTransport.RoundTrip(req)
 }
 
