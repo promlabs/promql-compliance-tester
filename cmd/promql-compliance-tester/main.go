@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"net/http"
 	"time"
 
 	"github.com/cheggaaa/pb/v3"
@@ -15,15 +16,26 @@ import (
 	"github.com/promlabs/promql-compliance-tester/testcases"
 )
 
-func newPromAPI(url string) (v1.API, error) {
-	client, err := api.NewClient(api.Config{
-		Address: url,
-	})
+func newPromAPI(targetConfig config.TargetConfig) (v1.API, error) {
+	apiConfig := api.Config{Address: targetConfig.QueryURL}
+	if len(targetConfig.XQueryKey) > 0 {
+		apiConfig.RoundTripper = RoundTripperWithHeader{XQueryKey: targetConfig.XQueryKey}
+	}
+	client, err := api.NewClient(apiConfig)
 	if err != nil {
-		return nil, errors.Wrapf(err, "creating Prometheus API client for %q: %v", url, err)
+		return nil, errors.Wrapf(err, "creating Prometheus API client for %q: %v", targetConfig.QueryURL, err)
 	}
 
 	return v1.NewAPI(client), nil
+}
+
+type RoundTripperWithHeader struct {
+	XQueryKey string
+}
+
+func (rt RoundTripperWithHeader) RoundTrip(req *http.Request) (*http.Response, error) {
+	req.Header.Add("X-Query-Key", rt.XQueryKey)
+	return http.DefaultTransport.RoundTrip(req)
 }
 
 func main() {
@@ -56,11 +68,11 @@ func main() {
 		log.Fatalf("Error loading configuration file: %v", err)
 	}
 
-	refAPI, err := newPromAPI(cfg.ReferenceTargetConfig.QueryURL)
+	refAPI, err := newPromAPI(cfg.ReferenceTargetConfig)
 	if err != nil {
 		log.Fatalf("Error creating reference API: %v", err)
 	}
-	testAPI, err := newPromAPI(cfg.TestTargetConfig.QueryURL)
+	testAPI, err := newPromAPI(cfg.TestTargetConfig)
 	if err != nil {
 		log.Fatalf("Error creating test API: %v", err)
 	}
