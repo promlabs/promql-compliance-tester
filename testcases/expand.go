@@ -125,8 +125,8 @@ func applyQueryTweaks(tc *comparer.TestCase, tweaks []*config.QueryTweak) *compa
 			resTC.Start = resTC.Start.Truncate(resTC.Resolution)
 			resTC.End = resTC.End.Truncate(resTC.Resolution)
 		}
-		if (config.Substitution{}) != t.ApplyQuerySubstitution {
-			resTC.Query = strings.ReplaceAll(resTC.Query, t.ApplyQuerySubstitution.Old, t.ApplyQuerySubstitution.New)
+		for oldStr, newStr := range t.QueryStringReplacements {
+			resTC.Query = strings.ReplaceAll(resTC.Query, oldStr, newStr)
 		}
 	}
 	return &resTC
