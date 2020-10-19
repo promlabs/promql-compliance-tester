@@ -34,6 +34,10 @@ type RoundTripperWithHeader struct {
 }
 
 func (rt RoundTripperWithHeader) RoundTrip(req *http.Request) (*http.Response, error) {
+	// Per RoundTrip's documentation, RoundTrip should not modify the request,
+	// except for consuming and closing the Request's Body.
+	// TODO: Update the Go Prometheus client code to support adding headers to request.
+
 	for key, value := range rt.Headers {
 		req.Header.Add(key, value)
 	}
