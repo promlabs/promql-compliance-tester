@@ -40,7 +40,6 @@ query_tweaks:
   # - note: 'New Relic is sometimes off by 1ms when parsing floating point start/end timestamps.'
   #   truncate_timestamps_to_ms: 1000
   # - note: 'New Relic adds a "prometheus_server" label to distinguish Prometheus servers, leading to extra labels in query results. These need to be stripped before comparisons.'
-  # - note: 'New Relic does not consistently include the "__name__" attribute in its responses.'
   #   no_bug: true
   #   drop_result_labels:
   #     - prometheus_server
