@@ -46,7 +46,7 @@ query_tweaks:
   #     - prometheus_server
   # - note: 'New Relic omits the first resolution step in the output.'
   #   ignore_first_step: true
-  # - note: 'New Relic stores metric counters as deltas, not cumulative values. New Relic will recognize these as guages by if "_cnt" is appended to the metric name.'
+  # - note: 'New Relic stores metric counters as deltas, not cumulative values. New Relic will recognize these as gauges by if "_cnt" is appended to the metric name.'
   #   query_string_replacements:
   #     _total: _total_cnt
 
