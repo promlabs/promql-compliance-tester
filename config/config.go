@@ -25,13 +25,19 @@ type TargetConfig struct {
 
 // A QueryTweak restricts or modifies a query in certain ways that avoids certain systematic errors and/or later comparison problems.
 type QueryTweak struct {
-	Note                    string            `yaml:"note" json:"note"`
-	NoBug                   bool              `yaml:"no_bug,omitempty" json:"noBug,omitempty"`
-	TruncateTimestampsToMS  int64             `yaml:"truncate_timestamps_to_ms" json:"truncateTimestampsToMS,omitempty"`
-	AlignTimestampsToStep   bool              `yaml:"align_timestamps_to_step" json:"alignTimestampsToStep,omitempty"`
-	DropResultLabels        []model.LabelName `yaml:"drop_result_labels" json:"dropResultLabels,omitempty"`
-	IgnoreFirstStep         bool              `yaml:"ignore_first_step" json:"ignoreFirstStep,omitempty"`
-	QueryStringReplacements map[string]string `yaml:"query_string_replacements" json:"queryStringReplacements,omitempty"`
+	Note                   string            `yaml:"note" json:"note"`
+	NoBug                  bool              `yaml:"no_bug,omitempty" json:"noBug,omitempty"`
+	TruncateTimestampsToMS int64             `yaml:"truncate_timestamps_to_ms" json:"truncateTimestampsToMS,omitempty"`
+	AlignTimestampsToStep  bool              `yaml:"align_timestamps_to_step" json:"alignTimestampsToStep,omitempty"`
+	DropResultLabels       []model.LabelName `yaml:"drop_result_labels" json:"dropResultLabels,omitempty"`
+	IgnoreFirstStep        bool              `yaml:"ignore_first_step" json:"ignoreFirstStep,omitempty"`
+	ApplyQuerySubstitution Substitution      `yaml:"apply_query_substitution" json:"applyQuerySubstitution,omitempty"`
+}
+
+type Substitution struct {
+	Remove      string   `yaml:"remove" json:"remove"`
+	Replacement string   `yaml:"replacement" json:"replacement"`
+	Exemptions  []string `yaml:"exemptions" json:"exemptions"`
 }
 
 // TestCase represents a given query (pattern) to be tested.

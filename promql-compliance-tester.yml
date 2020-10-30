@@ -47,7 +47,12 @@ query_tweaks:
   #   ignore_first_step: true
   # - note: 'New Relic stores metric counters as deltas, not cumulative values. New Relic will recognize these as gauges by if "_cnt" is appended to the metric name.'
   #   query_string_replacements:
-  #     _total: _total_cnt
+  #     remove: _total
+  #     replacement: _total_cnt
+  #     exemptions:
+  #       - delta
+  #       - rate
+  #       - increase
 
 test_cases:
   # Scalar literals.
