@@ -45,6 +45,8 @@ func main() {
 		}
 	case "json":
 		outp = output.JSON
+	case "tsv":
+		outp = output.TSV
 	default:
 		log.Fatalf("Invalid output format %q", *outputFormat)
 	}

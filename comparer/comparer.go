@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/google/go-cmp/cmp"
@@ -45,6 +46,7 @@ type Result struct {
 	Diff              string    `json:"diff"`
 	UnexpectedFailure string    `json:"unexpectedFailure"`
 	UnexpectedSuccess bool      `json:"unexpectedSuccess"`
+	Unsupported       bool      `json:"unsupported"`
 }
 
 // Success returns true if the comparison result was successful.
@@ -76,7 +78,7 @@ func (c *Comparer) Compare(tc *TestCase) (*Result, error) {
 
 	if (testErr != nil) != tc.ShouldFail {
 		if testErr != nil {
-			return &Result{TestCase: tc, UnexpectedFailure: testErr.Error()}, nil
+			return &Result{TestCase: tc, UnexpectedFailure: testErr.Error(), Unsupported: strings.Contains(testErr.Error(), "501")}, nil
 		}
 		return &Result{TestCase: tc, UnexpectedSuccess: true}, nil
 	}
