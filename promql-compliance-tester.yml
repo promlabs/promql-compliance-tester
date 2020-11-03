@@ -44,87 +44,87 @@ test_cases:
 
   # Vector selectors.
   # TODO: Add tests for staleness support.
-  - query: 'demo_cpu_usage_seconds_total'
-  - query: '{__name__="demo_cpu_usage_seconds_total"}'
-  - query: 'demo_cpu_usage_seconds_total{mode="idle"}'
-  - query: 'demo_cpu_usage_seconds_total{mode!="idle"}'
-  - query: 'demo_cpu_usage_seconds_total{instance=~"demo.promlabs.com:.*"}'
-  - query: 'demo_cpu_usage_seconds_total{instance=~"host"}'
-  - query: 'demo_cpu_usage_seconds_total{instance!~".*:10000"}'
-  - query: 'demo_cpu_usage_seconds_total{mode="idle", instance!="demo.promlabs.com:10000"}'
-  - query: '{mode="idle", instance!="demo.promlabs.com:10000"}'
+  - query: 'demo_memory_usage_bytes'
+  - query: '{__name__="demo_memory_usage_bytes"}'
+  - query: 'demo_memory_usage_bytes{type="free"}'
+  - query: 'demo_memory_usage_bytes{type!="free"}'
+  - query: 'demo_memory_usage_bytes{instance=~"demo.promlabs.com:.*"}'
+  - query: 'demo_memory_usage_bytes{instance=~"host"}'
+  - query: 'demo_memory_usage_bytes{instance!~".*:10000"}'
+  - query: 'demo_memory_usage_bytes{type="free", instance!="demo.promlabs.com:10000"}'
+  - query: '{type="free", instance!="demo.promlabs.com:10000"}'
   - query: '{__name__=~".*"}'
     should_fail: true
   - query: "nonexistent_metric_name"
-  - query: 'demo_cpu_usage_seconds_total offset {{.offset}}'
+  - query: 'demo_memory_usage_bytes offset {{.offset}}'
     variant_args: ['offset']
-  - query: 'demo_cpu_usage_seconds_total offset -{{.offset}}'
+  - query: 'demo_memory_usage_bytes offset -{{.offset}}'
     variant_args: ['offset']
     should_fail: true
 
   # Aggregation operators.
-  - query: '{{.simpleAggrOp}}(demo_cpu_usage_seconds_total)'
+  - query: '{{.simpleAggrOp}}(demo_memory_usage_bytes)'
     variant_args: ['simpleAggrOp']
   - query: '{{.simpleAggrOp}}(nonexistent_metric_name)'
     variant_args: ['simpleAggrOp']
-  - query: '{{.simpleAggrOp}} by() (demo_cpu_usage_seconds_total)'
+  - query: '{{.simpleAggrOp}} by() (demo_memory_usage_bytes)'
     variant_args: ['simpleAggrOp']
-  - query: '{{.simpleAggrOp}} by(instance) (demo_cpu_usage_seconds_total)'
+  - query: '{{.simpleAggrOp}} by(instance) (demo_memory_usage_bytes)'
     variant_args: ['simpleAggrOp']
-  - query: '{{.simpleAggrOp}} by(instance, mode) (demo_cpu_usage_seconds_total)'
+  - query: '{{.simpleAggrOp}} by(instance, type) (demo_memory_usage_bytes)'
     variant_args: ['simpleAggrOp']
-  - query: '{{.simpleAggrOp}} by(nonexistent) (demo_cpu_usage_seconds_total)'
+  - query: '{{.simpleAggrOp}} by(nonexistent) (demo_memory_usage_bytes)'
     variant_args: ['simpleAggrOp']
-  - query: '{{.simpleAggrOp}} without() (demo_cpu_usage_seconds_total)'
+  - query: '{{.simpleAggrOp}} without() (demo_memory_usage_bytes)'
     variant_args: ['simpleAggrOp']
-  - query: '{{.simpleAggrOp}} without(instance) (demo_cpu_usage_seconds_total)'
+  - query: '{{.simpleAggrOp}} without(instance) (demo_memory_usage_bytes)'
     variant_args: ['simpleAggrOp']
-  - query: '{{.simpleAggrOp}} without(instance, mode) (demo_cpu_usage_seconds_total)'
+  - query: '{{.simpleAggrOp}} without(instance, type) (demo_memory_usage_bytes)'
     variant_args: ['simpleAggrOp']
-  - query: '{{.simpleAggrOp}} without(nonexistent) (demo_cpu_usage_seconds_total)'
+  - query: '{{.simpleAggrOp}} without(nonexistent) (demo_memory_usage_bytes)'
     variant_args: ['simpleAggrOp']
-  - query: '{{.topBottomOp}} (3, demo_cpu_usage_seconds_total)'
+  - query: '{{.topBottomOp}} (3, demo_memory_usage_bytes)'
     variant_args: ['topBottomOp']
-  - query: '{{.topBottomOp}} by(instance) (2, demo_cpu_usage_seconds_total)'
+  - query: '{{.topBottomOp}} by(instance) (2, demo_memory_usage_bytes)'
     variant_args: ['topBottomOp']
-  - query: 'quantile({{.quantile}}, demo_cpu_usage_seconds_total)'
+  - query: 'quantile({{.quantile}}, demo_memory_usage_bytes)'
     variant_args: ['quantile']
-  - query: 'avg(max by(mode) (demo_cpu_usage_seconds_total))'
+  - query: 'avg(max by(type) (demo_memory_usage_bytes))'
 
   # Binary operators.
   - query: '1 * 2 + 4 / 6 - 10 % 2 ^ 2'
   - query: 'demo_num_cpus + (1 {{.compBinOp}} bool 2)'
     variant_args: ['compBinOp']
-  - query: 'demo_cpu_usage_seconds_total {{.binOp}} 1.2345'
+  - query: 'demo_memory_usage_bytes {{.binOp}} 1.2345'
     variant_args: ['binOp']
-  - query: 'demo_cpu_usage_seconds_total {{.compBinOp}} bool 1.2345'
+  - query: 'demo_memory_usage_bytes {{.compBinOp}} bool 1.2345'
     variant_args: ['compBinOp']
-  - query: '1.2345 {{.compBinOp}} bool demo_cpu_usage_seconds_total'
+  - query: '1.2345 {{.compBinOp}} bool demo_memory_usage_bytes'
     variant_args: ['compBinOp']
-  - query: '0.12345 {{.binOp}} demo_cpu_usage_seconds_total'
+  - query: '0.12345 {{.binOp}} demo_memory_usage_bytes'
     variant_args: ['binOp']
-  - query: '(1 * 2 + 4 / 6 - (10%7)^2) {{.binOp}} demo_cpu_usage_seconds_total'
+  - query: '(1 * 2 + 4 / 6 - (10%7)^2) {{.binOp}} demo_memory_usage_bytes'
     variant_args: ['binOp']
-  - query: 'demo_cpu_usage_seconds_total {{.binOp}} (1 * 2 + 4 / 6 - 10)'
+  - query: 'demo_memory_usage_bytes {{.binOp}} (1 * 2 + 4 / 6 - 10)'
     variant_args: ['binOp']
     # Check that vector-scalar binops set output timestamps correctly.
-  - query: 'timestamp(demo_cpu_usage_seconds_total * 1)'
+  - query: 'timestamp(demo_memory_usage_bytes * 1)'
     # Check that unary minus sets timestamps correctly.
     # TODO: Check this more systematically for every node type?
-  - query: 'timestamp(-demo_cpu_usage_seconds_total)'
-  - query: 'demo_cpu_usage_seconds_total {{.binOp}} on(instance, job, mode) demo_cpu_usage_seconds_total'
+  - query: 'timestamp(-demo_memory_usage_bytes)'
+  - query: 'demo_memory_usage_bytes {{.binOp}} on(instance, job, type) demo_memory_usage_bytes'
     variant_args: ['binOp']
-  - query: 'sum by(instance, mode) (demo_cpu_usage_seconds_total) {{.binOp}} on(instance, mode) group_left(job) demo_cpu_usage_seconds_total'
+  - query: 'sum by(instance, type) (demo_memory_usage_bytes) {{.binOp}} on(instance, type) group_left(job) demo_memory_usage_bytes'
     variant_args: ['binOp']
-  - query: 'demo_cpu_usage_seconds_total {{.compBinOp}} bool on(instance, job, mode) demo_cpu_usage_seconds_total'
+  - query: 'demo_memory_usage_bytes {{.compBinOp}} bool on(instance, job, type) demo_memory_usage_bytes'
     variant_args: ['compBinOp']
     # Check that __name__ is always dropped, even if it's part of the matching labels.
-  - query: 'demo_cpu_usage_seconds_total / on(instance, job, mode, __name__) demo_cpu_usage_seconds_total'
-  - query: 'sum without(job) (demo_cpu_usage_seconds_total) / on(instance, mode) demo_cpu_usage_seconds_total'
-  - query: 'sum without(job) (demo_cpu_usage_seconds_total) / on(instance, mode) group_left demo_cpu_usage_seconds_total'
-  - query: 'sum without(job) (demo_cpu_usage_seconds_total) / on(instance, mode) group_left(job) demo_cpu_usage_seconds_total'
-  - query: 'demo_cpu_usage_seconds_total / on(instance, job) group_left demo_num_cpus'
-  - query: 'demo_cpu_usage_seconds_total / on(instance, mode, job, non_existent) demo_cpu_usage_seconds_total'
+  - query: 'demo_memory_usage_bytes / on(instance, job, type, __name__) demo_memory_usage_bytes'
+  - query: 'sum without(job) (demo_memory_usage_bytes) / on(instance, type) demo_memory_usage_bytes'
+  - query: 'sum without(job) (demo_memory_usage_bytes) / on(instance, type) group_left demo_memory_usage_bytes'
+  - query: 'sum without(job) (demo_memory_usage_bytes) / on(instance, type) group_left(job) demo_memory_usage_bytes'
+  - query: 'demo_memory_usage_bytes / on(instance, job) group_left demo_num_cpus'
+  - query: 'demo_memory_usage_bytes / on(instance, type, job, non_existent) demo_memory_usage_bytes'
   # TODO: Add non-explicit many-to-one / one-to-many that errors.
   # TODO: Add many-to-many match that errors.
 
@@ -134,8 +134,8 @@ test_cases:
   - query: 'demo_num_cpus * NaN'
 
   # Unary expressions.
-  - query: 'demo_cpu_usage_seconds_total + -(1)'
-  - query: '-demo_cpu_usage_seconds_total'
+  - query: 'demo_memory_usage_bytes + -(1)'
+  - query: '-demo_memory_usage_bytes'
     # Check precedence.
   - query: -1 ^ 2
 
@@ -152,21 +152,21 @@ test_cases:
     variant_args: ['arithBinOp']
   - query: 'time() {{.compBinOp}} bool time()'
     variant_args: ['compBinOp']
-  - query: 'time() {{.binOp}} demo_cpu_usage_seconds_total'
+  - query: 'time() {{.binOp}} demo_memory_usage_bytes'
     variant_args: ['binOp']
-  - query: 'demo_cpu_usage_seconds_total {{.binOp}} time()'
+  - query: 'demo_memory_usage_bytes {{.binOp}} time()'
     variant_args: ['binOp']
 
   # Functions.
-  - query: '{{.simpleAggrOp}}_over_time(demo_cpu_usage_seconds_total[{{.range}}])'
+  - query: '{{.simpleAggrOp}}_over_time(demo_memory_usage_bytes[{{.range}}])'
     variant_args: ['simpleAggrOp', 'range']
-  - query: 'quantile_over_time({{.quantile}}, demo_cpu_usage_seconds_total[{{.range}}])'
+  - query: 'quantile_over_time({{.quantile}}, demo_memory_usage_bytes[{{.range}}])'
     variant_args: ['quantile', 'range']
   - query: 'timestamp(demo_num_cpus)'
   - query: 'timestamp(timestamp(demo_num_cpus))'
-  - query: '{{.simpleMathFunc}}(demo_cpu_usage_seconds_total)'
+  - query: '{{.simpleMathFunc}}(demo_memory_usage_bytes)'
     variant_args: ['simpleMathFunc']
-  - query: '{{.simpleMathFunc}}(-demo_cpu_usage_seconds_total)'
+  - query: '{{.simpleMathFunc}}(-demo_memory_usage_bytes)'
     variant_args: ['simpleMathFunc']
   - query: '{{.extrapolatedRateFunc}}(nonexistent_metric[5m])'
     variant_args: ['extrapolatedRateFunc']
@@ -211,7 +211,7 @@ test_cases:
     variant_args: ['dateFunc', 'offset']
   - query: '{{.instantRateFunc}}(demo_cpu_usage_seconds_total[{{.range}}])'
     variant_args: ['instantRateFunc', 'range']
-  - query: '{{.clampFunc}}(demo_cpu_usage_seconds_total, 2)'
+  - query: '{{.clampFunc}}(demo_memory_usage_bytes, 2)'
     variant_args: ['clampFunc']
   - query: 'resets(demo_cpu_usage_seconds_total[{{.range}}])'
     variant_args: ['range']
@@ -223,7 +223,7 @@ test_cases:
     variant_args: ['quantile']
   - query: 'histogram_quantile(0.9, nonexistent_metric)'
   - # Missing "le" label.
-    query: 'histogram_quantile(0.9, demo_cpu_usage_seconds_total)'
+    query: 'histogram_quantile(0.9, demo_memory_usage_bytes)'
   - # Missing "le" label only in some series of the same grouping.
     query: 'histogram_quantile(0.9, {__name__=~"demo_api_request_duration_seconds_.+"})'
   - query: 'holt_winters(demo_disk_usage_bytes[10m], {{.smoothingFactor}}, {{.trendFactor}})'
