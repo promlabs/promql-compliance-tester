@@ -50,7 +50,8 @@ test_cases:
   # Scalar literals.
   - query: '42'
   - query: '1.234'
-  - query: '.123e-9'
+  - query: '.123'
+  - query: '1.23e-3'
   - query: '0x3d'
   - query: 'Inf'
   - query: '+Inf'
