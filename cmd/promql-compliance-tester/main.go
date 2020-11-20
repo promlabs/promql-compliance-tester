@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"net/http"
 	"time"
 
 	"github.com/cheggaaa/pb/v3"
@@ -15,15 +16,32 @@ import (
 	"github.com/promlabs/promql-compliance-tester/testcases"
 )
 
-func newPromAPI(url string) (v1.API, error) {
-	client, err := api.NewClient(api.Config{
-		Address: url,
-	})
+func newPromAPI(targetConfig config.TargetConfig) (v1.API, error) {
+	apiConfig := api.Config{Address: targetConfig.QueryURL}
+	if len(targetConfig.Headers) > 0 {
+		apiConfig.RoundTripper = RoundTripperWithHeader{targetConfig.Headers}
+	}
+	client, err := api.NewClient(apiConfig)
 	if err != nil {
-		return nil, errors.Wrapf(err, "creating Prometheus API client for %q: %v", url, err)
+		return nil, errors.Wrapf(err, "creating Prometheus API client for %q: %v", targetConfig.QueryURL, err)
 	}
 
 	return v1.NewAPI(client), nil
+}
+
+type RoundTripperWithHeader struct {
+	Headers map[string]string
+}
+
+func (rt RoundTripperWithHeader) RoundTrip(req *http.Request) (*http.Response, error) {
+	// Per RoundTrip's documentation, RoundTrip should not modify the request,
+	// except for consuming and closing the Request's Body.
+	// TODO: Update the Go Prometheus client code to support adding headers to request.
+
+	for key, value := range rt.Headers {
+		req.Header.Add(key, value)
+	}
+	return http.DefaultTransport.RoundTrip(req)
 }
 
 func main() {
@@ -56,11 +74,11 @@ func main() {
 		log.Fatalf("Error loading configuration file: %v", err)
 	}
 
-	refAPI, err := newPromAPI(cfg.ReferenceTargetConfig.QueryURL)
+	refAPI, err := newPromAPI(cfg.ReferenceTargetConfig)
 	if err != nil {
 		log.Fatalf("Error creating reference API: %v", err)
 	}
-	testAPI, err := newPromAPI(cfg.TestTargetConfig.QueryURL)
+	testAPI, err := newPromAPI(cfg.TestTargetConfig)
 	if err != nil {
 		log.Fatalf("Error creating test API: %v", err)
 	}
