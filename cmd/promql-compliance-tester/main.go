@@ -18,8 +18,8 @@ import (
 
 func newPromAPI(targetConfig config.TargetConfig) (v1.API, error) {
 	apiConfig := api.Config{Address: targetConfig.QueryURL}
-	if len(targetConfig.Headers) > 0 {
-		apiConfig.RoundTripper = RoundTripperWithHeader{targetConfig.Headers}
+	if len(targetConfig.Headers) > 0 || targetConfig.BasicAuthUser != "" {
+		apiConfig.RoundTripper = roundTripperWithSettings{headers: targetConfig.Headers, basicAuthUser: targetConfig.BasicAuthUser, basicAuthPass: targetConfig.BasicAuthPass}
 	}
 	client, err := api.NewClient(apiConfig)
 	if err != nil {
@@ -29,16 +29,22 @@ func newPromAPI(targetConfig config.TargetConfig) (v1.API, error) {
 	return v1.NewAPI(client), nil
 }
 
-type RoundTripperWithHeader struct {
-	Headers map[string]string
+type roundTripperWithSettings struct {
+	headers       map[string]string
+	basicAuthUser string
+	basicAuthPass string
 }
 
-func (rt RoundTripperWithHeader) RoundTrip(req *http.Request) (*http.Response, error) {
+func (rt roundTripperWithSettings) RoundTrip(req *http.Request) (*http.Response, error) {
 	// Per RoundTrip's documentation, RoundTrip should not modify the request,
 	// except for consuming and closing the Request's Body.
 	// TODO: Update the Go Prometheus client code to support adding headers to request.
 
-	for key, value := range rt.Headers {
+	if rt.basicAuthUser != "" {
+		req.SetBasicAuth(rt.basicAuthUser, rt.basicAuthPass)
+	}
+
+	for key, value := range rt.headers {
 		req.Header.Add(key, value)
 	}
 	return http.DefaultTransport.RoundTrip(req)
