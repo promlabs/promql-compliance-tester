@@ -73,6 +73,37 @@ query_tweaks:
   # - note: 'Chronosphere rounds incoming query timestamps to a full second.'
   #   truncate_timestamps_to_ms: 1000
 
+# This set of example queries expects data from the following Prometheus configuration file  to have
+# been ingested into both a vanilla Prometheus server and the third-party system for several hours,
+# so that the tester can compare query results from both systems over a range of time:
+#
+# ----------- prometheus.yml -----------
+# global:
+#   scrape_interval: 5s
+#
+# scrape_configs:
+# - job_name: 'demo'
+#   static_configs:
+#     - targets:
+#       - 'demo.promlabs.com:10000'
+#       - 'demo.promlabs.com:10001'
+#       - 'demo.promlabs.com:10002'
+# --------------------------------------
+#
+# You will have to add a "remote_write" section to this configuration to ingest data into the third-party
+# system, or in the case of Thanos, add a Thanos sidecar to the Prometheus running with this configuration.
+# See https://promlabs.com/blog/2020/08/06/comparing-promql-correctness-across-vendors#first-comparisons for
+# more background information.
+#
+# The demo service instances expose a predictable set of synthetic metrics and are hosted on a best-effort
+# basis by PromLabs. If you want to run your own demo service instances instead, you can do so via:
+#
+#   docker run -p 10000:10000 julius/prometheus-demo-service:latest -listen-address=:10000
+#   docker run -p 10001:10001 julius/prometheus-demo-service:latest -listen-address=:10001
+#   docker run -p 10002:10002 julius/prometheus-demo-service:latest -listen-address=:10002
+#
+# You will then also need to replace the host "demo.promlabs.com" in the test queries below with whatever
+# host you are running the instances on.
 test_cases:
   # Scalar literals.
   - query: '42'
