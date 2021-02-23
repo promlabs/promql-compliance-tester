@@ -27,12 +27,18 @@ type TargetConfig struct {
 
 // A QueryTweak restricts or modifies a query in certain ways that avoids certain systematic errors and/or later comparison problems.
 type QueryTweak struct {
-	Note                   string            `yaml:"note" json:"note"`
-	NoBug                  bool              `yaml:"no_bug,omitempty" json:"noBug,omitempty"`
-	TruncateTimestampsToMS int64             `yaml:"truncate_timestamps_to_ms" json:"truncateTimestampsToMS,omitempty"`
-	AlignTimestampsToStep  bool              `yaml:"align_timestamps_to_step" json:"alignTimestampsToStep,omitempty"`
-	DropResultLabels       []model.LabelName `yaml:"drop_result_labels" json:"dropResultLabels,omitempty"`
-	IgnoreFirstStep        bool              `yaml:"ignore_first_step" json:"ignoreFirstStep,omitempty"`
+	Note                   string                `yaml:"note" json:"note"`
+	NoBug                  bool                  `yaml:"no_bug,omitempty" json:"noBug,omitempty"`
+	TruncateTimestampsToMS int64                 `yaml:"truncate_timestamps_to_ms" json:"truncateTimestampsToMS,omitempty"`
+	AlignTimestampsToStep  bool                  `yaml:"align_timestamps_to_step" json:"alignTimestampsToStep,omitempty"`
+	DropResultLabels       []model.LabelName     `yaml:"drop_result_labels" json:"dropResultLabels,omitempty"`
+	IgnoreFirstStep        bool                  `yaml:"ignore_first_step" json:"ignoreFirstStep,omitempty"`
+	AdjustValueTolerance   *AdjustValueTolerance `yaml:"adjust_value_tolerance" json:"adjustValueTolerance,omitempty"`
+}
+
+type AdjustValueTolerance struct {
+	Fraction *float64 `yaml:"fraction" json:"fraction,omitempty"`
+	Margin   *float64 `yaml:"margin" json:"margin,omitempty"`
 }
 
 // TestCase represents a given query (pattern) to be tested.
