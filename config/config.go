@@ -1,22 +1,23 @@
 package config
 
 import (
+	"io/ioutil"
+
 	"github.com/pkg/errors"
 	"github.com/prometheus/common/model"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
 )
 
 // Config models the main configuration file.
 type Config struct {
-	ReferenceTargetConfig TargetConfig  `yaml:"reference_target_config"`
-	TestTargetConfig      TargetConfig  `yaml:"test_target_config"`
-	QueryTweaks           []*QueryTweak `yaml:"query_tweaks"`
-	TestCases             []*TestCase   `yaml:"test_cases"`
-	Timing                Timing        `yaml:"timing"`
+	ReferenceTargetConfig TargetConfig        `yaml:"reference_target_config"`
+	TestTargetConfig      TargetConfig        `yaml:"test_target_config"`
+	QueryTweaks           []*QueryTweak       `yaml:"query_tweaks"`
+	TestCases             []*TestCase         `yaml:"test_cases"`
+	QueryTimeParameters   QueryTimeParameters `yaml:"query_time_parameters"`
 }
 
-type Timing struct {
+type QueryTimeParameters struct {
 	EndTime             string  `yaml:"end_time"`
 	RangeInSeconds      float64 `yaml:"range_in_seconds"`
 	ResolutionInSeconds float64 `yaml:"resolution_in_seconds"`
