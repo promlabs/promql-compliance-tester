@@ -79,7 +79,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading configuration file: %v", err)
 	}
-
 	refAPI, err := newPromAPI(cfg.ReferenceTargetConfig)
 	if err != nil {
 		log.Fatalf("Error creating reference API: %v", err)
@@ -89,11 +88,7 @@ func main() {
 		log.Fatalf("Error creating test API: %v", err)
 	}
 
-	comp := comparer.Comparer{
-		RefAPI:      refAPI,
-		TestAPI:     testAPI,
-		QueryTweaks: cfg.QueryTweaks,
-	}
+	comp := comparer.New(refAPI, testAPI, cfg.QueryTweaks)
 
 	// Expand all placeholder variations in the templated test cases.
 	end := time.Now().Add(-2 * time.Minute)
