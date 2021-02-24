@@ -1,11 +1,10 @@
 package config
 
 import (
-	"io/ioutil"
-
 	"github.com/pkg/errors"
 	"github.com/prometheus/common/model"
 	"gopkg.in/yaml.v2"
+	"io/ioutil"
 )
 
 // Config models the main configuration file.
@@ -14,6 +13,13 @@ type Config struct {
 	TestTargetConfig      TargetConfig  `yaml:"test_target_config"`
 	QueryTweaks           []*QueryTweak `yaml:"query_tweaks"`
 	TestCases             []*TestCase   `yaml:"test_cases"`
+	Timing                Timing        `yaml:"timing"`
+}
+
+type Timing struct {
+	EndTime             string  `yaml:"end_time"`
+	RangeInSeconds      float64 `yaml:"range_in_seconds"`
+	ResolutionInSeconds float64 `yaml:"resolution_in_seconds"`
 }
 
 // TargetConfig represents the configuration of a single Prometheus API endpoint.
